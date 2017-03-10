@@ -838,19 +838,19 @@ DEFUN (cli_lldp_show_intf_statistics,
 
         atom.string = lldp_interface_statistics_keys[0];
         index = ovsdb_datum_find_key(datum, &atom, OVSDB_TYPE_STRING);
-        vty_out(vty, "Packets transmitted :%ld%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
+        vty_out(vty, "Packets transmitted :%"PRId64"%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
 
         atom.string = lldp_interface_statistics_keys [1];
         index = ovsdb_datum_find_key(datum, &atom, OVSDB_TYPE_STRING);
-        vty_out(vty, "Packets received :%ld%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
+        vty_out(vty, "Packets received :%"PRId64"%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
 
         atom.string = lldp_interface_statistics_keys[2];
         index = ovsdb_datum_find_key(datum, &atom, OVSDB_TYPE_STRING);
-        vty_out(vty, "Packets received and discarded :%ld%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
+        vty_out(vty, "Packets received and discarded :%"PRId64"%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
 
         atom.string = lldp_interface_statistics_keys[3];
         index = ovsdb_datum_find_key(datum, &atom, OVSDB_TYPE_STRING);
-        vty_out(vty, "Packets received and unrecognized :%ld%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
+        vty_out(vty, "Packets received and unrecognized :%"PRId64"%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
         break;
      }
   }
@@ -1457,16 +1457,16 @@ DEFUN (cli_lldp_show_intf_neighbor_info,
         index = ovsdb_datum_find_key(datum, &atom, OVSDB_TYPE_STRING);
         delete_cnt = (index == UINT_MAX) ? 0 : datum->values[index].integer;
 
-        vty_out(vty, "Neighbor entries               : %ld%s", (insert_cnt-delete_cnt), VTY_NEWLINE);
-        vty_out(vty, "Neighbor entries deleted       : %ld%s", delete_cnt, VTY_NEWLINE);
+        vty_out(vty, "Neighbor entries               : %"PRId64"%s", (insert_cnt-delete_cnt), VTY_NEWLINE);
+        vty_out(vty, "Neighbor entries deleted       : %"PRId64"%s", delete_cnt, VTY_NEWLINE);
 
         atom.string = lldp_interface_neighbor_info_keys[2];
         index = ovsdb_datum_find_key(datum, &atom, OVSDB_TYPE_STRING);
-        vty_out(vty, "Neighbor entries dropped       : %ld%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
+        vty_out(vty, "Neighbor entries dropped       : %"PRId64"%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
 
         atom.string = lldp_interface_neighbor_info_keys[3];
         index = ovsdb_datum_find_key(datum, &atom, OVSDB_TYPE_STRING);
-        vty_out(vty, "Neighbor entries age-out       : %ld%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
+        vty_out(vty, "Neighbor entries age-out       : %"PRId64"%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
 
         datum = ovsrec_interface_get_lldp_neighbor_info(ifrow, OVSDB_TYPE_STRING, OVSDB_TYPE_STRING);
 
@@ -1732,12 +1732,12 @@ DEFUN (cli_lldp_show_local_device,
 
             vty_out(vty, "Port VLAN Id      : ");
             if (portrow->vlan_tag)
-                vty_out(vty, "%lu%s", (int64_t)ops_port_get_tag(portrow), VTY_NEWLINE);
+                vty_out(vty, "%"PRIu64"%s", (int64_t)ops_port_get_tag(portrow), VTY_NEWLINE);
 
             if (strcmp(portrow->vlan_mode, OVSREC_PORT_VLAN_MODE_ACCESS) == 0) {
                 vty_out(vty, "VLAN-Ids          : ");
                 if (portrow->vlan_tag)
-                    vty_out(vty, "%lu%s", (int64_t)ops_port_get_tag(portrow), VTY_NEWLINE);
+                    vty_out(vty, "%"PRIu64"%s", (int64_t)ops_port_get_tag(portrow), VTY_NEWLINE);
 
                 vty_out(vty, "VLAN Name         : %s%s", (vlan_name ? vlan_name : ""), VTY_NEWLINE);
                 vty_out(vty, "%s", VTY_NEWLINE);
@@ -1745,7 +1745,7 @@ DEFUN (cli_lldp_show_local_device,
                 vty_out(vty, "VLAN-Ids          : ");
 
                 if (portrow->vlan_tag)
-                    vty_out(vty, "%lu", (int64_t)ops_port_get_tag(portrow));
+                    vty_out(vty, "%"PRIu64, (int64_t)ops_port_get_tag(portrow));
 
 
                 for (i = 0; i < portrow->n_vlan_trunks; i++) {
@@ -1756,7 +1756,7 @@ DEFUN (cli_lldp_show_local_device,
                         vty_out(vty, ", ");
 
 
-                    vty_out(vty, "%lu", (int64_t)ops_port_get_trunks(portrow, i));
+                    vty_out(vty, "%"PRIu64, (int64_t)ops_port_get_trunks(portrow, i));
                 }
 
                 vty_out(vty, " %s", VTY_NEWLINE);
@@ -1788,7 +1788,7 @@ DEFUN (cli_lldp_show_local_device,
             for (i = 0; i < portrow->n_vlan_trunks; i++) {
                 if ( i )
                     vty_out(vty, ", ");
-                vty_out(vty, "%lu", (int64_t)ops_port_get_trunks(portrow, i));
+                vty_out(vty, "%"PRIu64"", (int64_t)ops_port_get_trunks(portrow, i));
             }
 
             vty_out(vty, " %s", VTY_NEWLINE);
@@ -1924,7 +1924,7 @@ DEFUN (lldp_if_lldp_tx,
        INTF_LLDP_STR
        "Enable LLDP transmission on interface\n")
 {
-  if(lldp_ovsdb_if_lldp_state((char*)vty->index, LLDP_TX) != 0)
+  if(lldp_ovsdb_if_lldp_state((char*)((uintptr_t)vty->index), LLDP_TX) != 0)
     VLOG_ERR("Failed to set lldp transmission");
 
   return CMD_SUCCESS;
@@ -1936,7 +1936,7 @@ DEFUN (lldp_if_lldp_rx,
        INTF_LLDP_STR
        "Enable LLDP reception on interface\n")
 {
-  if(lldp_ovsdb_if_lldp_state((char*)vty->index, LLDP_RX) != 0)
+  if(lldp_ovsdb_if_lldp_state((char*)((uintptr_t)vty->index), LLDP_RX) != 0)
     VLOG_ERR("Failed to set lldp reception");
 
   return CMD_SUCCESS;
@@ -2069,7 +2069,7 @@ DEFUN (lldp_if_no_lldp_tx,
        INTF_LLDP_STR
        "Disable LLDP transmission on interface\n")
 {
-  if(lldp_ovsdb_if_lldp_nodirstate((char*)vty->index, LLDP_TX) != 0)
+  if(lldp_ovsdb_if_lldp_nodirstate((char*)((uintptr_t)vty->index), LLDP_TX) != 0)
     VLOG_ERR("Failed to set lldp transmission");
 
   return CMD_SUCCESS;
@@ -2082,7 +2082,7 @@ DEFUN (lldp_if_no_lldp_rx,
        INTF_LLDP_STR
        "Disable LLDP reception on interface\n")
 {
-  if(lldp_ovsdb_if_lldp_nodirstate((char*)vty->index, LLDP_RX) != 0)
+  if(lldp_ovsdb_if_lldp_nodirstate((char*)((uintptr_t)vty->index), LLDP_RX) != 0)
     VLOG_ERR("Failed to set lldp reception");
 
   return CMD_SUCCESS;

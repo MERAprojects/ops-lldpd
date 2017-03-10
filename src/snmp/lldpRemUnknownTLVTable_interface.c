@@ -215,12 +215,12 @@ int lldpRemUnknownTLVTable_index_from_oid(
 
     err = parse_oid_indexes(oid_idx->oids, oid_idx->len, &var_lldpRemTimeMark);
     if (err == SNMP_ERR_NOERROR) {
-        mib_idx->lldpRemTimeMark = *((long *)var_lldpRemTimeMark.val.string);
+        mib_idx->lldpRemTimeMark = *((long *)((uintptr_t)var_lldpRemTimeMark.val.string));
         mib_idx->lldpRemLocalPortNum =
-            *((long *)var_lldpRemLocalPortNum.val.string);
-        mib_idx->lldpRemIndex = *((long *)var_lldpRemIndex.val.string);
+            *((long *)((uintptr_t)var_lldpRemLocalPortNum.val.string));
+        mib_idx->lldpRemIndex = *((long *)((uintptr_t)var_lldpRemIndex.val.string));
         mib_idx->lldpRemUnknownTLVType =
-            *((long *)var_lldpRemUnknownTLVType.val.string);
+            *((long *)((uintptr_t)var_lldpRemUnknownTLVType.val.string));
     }
 
     snmp_reset_var_buffers(&var_lldpRemTimeMark);
